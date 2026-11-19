@@ -1,0 +1,112 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { profile } from '../data/profile';
+
+const links = [
+  { href: '/#sobre', label: 'Sobre' },
+  { href: '/#projetos', label: 'Projetos' },
+  { href: '/#carreira', label: 'Carreira' },
+  { href: '/#skills', label: 'Skills' },
+  { href: '/#certificados', label: 'Certificados' },
+  { href: '/#contato', label: 'Contato' },
+  { href: '/curriculo/', label: 'Currículo' },
+];
+---
+
+<header class="header">
+  <nav class="container nav" aria-label="Principal">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <rect width="64" height="64" rx="12" />
+        <path
+          d="M14.41 10 L17.52 10 L17.52 50.89 L42.49 50.89 L27 34.11 L29.29 32 L49.59 54 L14.41 54 Z M42.57 10 L46.88 10 L20.58 37.32 L20.58 32.84 Z"
+        />
+      </svg>
+      {profile.shortName}
+    </a>
+    <ul class="menu">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <ThemeToggle />
+  </nav>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .mark rect {
+    fill: var(--accent-fill);
+  }
+
+  .mark path {
+    fill: var(--on-accent);
+  }
+
+  .menu {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+  }
+
+  .menu a {
+    display: block;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .menu a:hover {
+    color: var(--text);
+    background: var(--accent-soft);
+  }
+
+  @media (max-width: 760px) {
+    .nav {
+      flex-wrap: wrap;
+      padding-block: 0.5rem;
+    }
+
+    .menu {
+      order: 3;
+      width: 100%;
+      padding-bottom: 0.25rem;
+    }
+  }
+</style>

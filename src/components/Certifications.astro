@@ -1,0 +1,112 @@
+---
+import Icon from './Icon.astro';
+import { awards, certificates } from '../data/certifications';
+import { formatMonth } from '../data/experience';
+---
+
+<section id="certificados" class="section container">
+  <h2 class="section-title">Prêmios e certificados</h2>
+
+  <div class="awards">
+    {
+      awards.map((award) => (
+        <article class="card award">
+          <span class="medal" aria-hidden="true">🏅</span>
+          <div>
+            <h3>{award.title}</h3>
+            <p class="meta">
+              {award.issuer} · {formatMonth(award.date)}
+            </p>
+            <p class="muted">{award.description}</p>
+            {award.pdf && (
+              <a class="doc-link" href={award.pdf} target="_blank" rel="noopener">
+                <Icon name="external" size={16} /> Ver certificado (PDF)
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <ul class="certs">
+    {
+      certificates.map((cert) => (
+        <li class="card cert">
+          <h3>{cert.title}</h3>
+          <p class="meta">{cert.issuer}</p>
+          <p class="muted">
+            {formatMonth(cert.date)} · {cert.hours}
+          </p>
+          <a href={cert.url} target="_blank" rel="noopener noreferrer">
+            <Icon name="external" size={16} /> Ver certificado
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .awards {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .award {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: linear-gradient(135deg, var(--accent-soft), var(--bg-elev) 60%);
+  }
+
+  .medal {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    margin: 0 0 0.25rem;
+  }
+
+  .meta {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  .certs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .cert {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cert a {
+    margin-top: auto;
+  }
+
+  .cert a,
+  .doc-link {
+    padding-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+</style>

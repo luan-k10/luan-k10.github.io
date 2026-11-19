@@ -1,0 +1,155 @@
+---
+import { getCollection, render } from 'astro:content';
+import Icon from './Icon.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(projects.map(async (project) => ({ project, ...(await render(project)) })));
+---
+
+<section id="projetos" class="section container">
+  <h2 class="section-title">Projetos</h2>
+  <div class="grid">
+    {
+      rendered.map(({ project, Content }) => (
+        <article class="card project">
+          {project.data.context && <p class="context">{project.data.context}</p>}
+          <h3>{project.data.title}</h3>
+          {(project.data.award || project.data.status) && (
+            <div class="badges">
+              {project.data.award &&
+                (project.data.awardUrl ? (
+                  <a
+                    class="badge award"
+                    href={project.data.awardUrl}
+                    target="_blank"
+                    rel="noopener"
+                    title="Ver certificado (PDF)"
+                  >
+                    {project.data.award}
+                  </a>
+                ) : (
+                  <span class="badge award">{project.data.award}</span>
+                ))}
+              {project.data.status && <span class="badge">{project.data.status}</span>}
+            </div>
+          )}
+          <p class="summary">{project.data.summary}</p>
+          <div class="details">
+            <Content />
+          </div>
+          <ul class="tags" aria-label="Tecnologias">
+            {project.data.stack.map((tech) => (
+              <li class="tag">{tech}</li>
+            ))}
+          </ul>
+          <div class="links">
+            {project.data.demo && (
+              <a class="btn btn-primary" href={project.data.demo} target="_blank" rel="noopener noreferrer">
+                <Icon name="external" /> Ver online
+              </a>
+            )}
+            {project.data.repo && (
+              <a class="btn" href={project.data.repo} target="_blank" rel="noopener noreferrer">
+                <Icon name="github" /> Código
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .project:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .context {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .summary {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .badge.award {
+    border-color: #d4a017;
+    color: #a16207;
+    background: rgb(212 160 23 / 12%);
+  }
+
+  a.badge.award {
+    text-decoration: none;
+  }
+
+  a.badge.award:hover {
+    background: rgb(212 160 23 / 22%);
+  }
+
+  :global([data-theme='dark']) .badge.award {
+    color: #fcd34d;
+  }
+
+  .details {
+    color: var(--muted);
+    font-size: 0.95rem;
+    flex: 1;
+  }
+
+  .details :global(ul) {
+    padding-left: 1.1rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .details :global(p) {
+    margin: 0 0 0.25rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+</style>

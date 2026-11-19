@@ -1,0 +1,34 @@
+---
+import { skills } from '../data/skills';
+---
+
+<section id="skills" class="section container">
+  <h2 class="section-title">Skills</h2>
+  <div class="grid">
+    {
+      skills.map((group) => (
+        <div class="card">
+          <h3>{group.category}</h3>
+          <ul class="tags">
+            {group.items.map((item) => (
+              <li class="tag">{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+  }
+</style>

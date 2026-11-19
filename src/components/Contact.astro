@@ -1,0 +1,86 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+
+const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+const contacts = [
+  { icon: 'mail', label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
+  { icon: 'linkedin', label: 'LinkedIn', value: display(profile.linkedin), href: profile.linkedin },
+  { icon: 'github', label: 'GitHub', value: display(profile.github), href: profile.github },
+] as const;
+---
+
+<section id="contato" class="section container">
+  <h2 class="section-title">Contato</h2>
+  <div class="card contact">
+    <p class="lead">
+      Estou aberto a oportunidades em desenvolvimento de software e análise de dados. Vamos conversar?
+    </p>
+    <ul class="list">
+      {
+        contacts.map((contact) => (
+          <li>
+            <a
+              href={contact.href}
+              {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              <Icon name={contact.icon} size={22} />
+              <span>
+                <strong>{contact.label}</strong>
+                <span class="muted">{contact.value}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="btn btn-primary" href="/curriculo/"><Icon name="download" /> Ver / baixar currículo</a>
+  </div>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .lead {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .list a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .list a:hover {
+    border-color: var(--accent);
+  }
+
+  .list a > span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+</style>
