@@ -1,12 +1,17 @@
 ---
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+import { getLang, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <div class="container">
-    <p class="muted">© {year} {profile.name} · Feito com Astro e publicado no GitHub Pages.</p>
+    <p class="muted">© {year} {profile.name} · {t.footer}</p>
   </div>
 </footer>
 

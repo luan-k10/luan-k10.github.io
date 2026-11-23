@@ -17,14 +17,17 @@ npm run preview   # serve o conteúdo de dist/
 
 ## Onde editar o conteúdo
 
+O site tem duas versões: **português** na raiz (`/`, `/curriculo/`) e **inglês** em `/en/` (`/en/`, `/en/resume/`). O botão **EN / PT** no cabeçalho alterna entre elas. Nos arquivos de `src/data/`, os textos traduzíveis ficam lado a lado no formato `{ pt: '...', en: '...' }` (uma string simples vale para os dois idiomas).
+
 | O quê | Arquivo |
 | --- | --- |
+| Textos fixos da interface (menu, títulos, botões) e rotas de cada idioma | `src/i18n/index.ts` |
 | Nome, cargo, bio, links, formação, idiomas, foto | `src/data/profile.ts` |
 | Experiências (timeline da carreira) | `src/data/experience.ts` |
 | Skills | `src/data/skills.ts` |
 | Prêmios e certificados | `src/data/certifications.ts` |
 | PDFs de certificados (linkados pelo campo `pdf` do prêmio / `awardUrl` do projeto) | `public/certificados/` |
-| Projetos (um arquivo `.md` por projeto) | `src/content/projects/` |
+| Projetos (um arquivo `.md` por projeto e idioma) | `src/content/projects/pt/` e `src/content/projects/en/` |
 | Cores e estilos globais (destaque bordô `--accent`, `--accent-fill`) | `src/styles/global.css` |
 | Imagem de compartilhamento (Open Graph, 1200×630, com a logo "LK") | `public/og-image.png` |
 | Logo "LK" (bordô `#6e1423`, fundo transparente) | `public/logo.svg` |
@@ -33,7 +36,7 @@ npm run preview   # serve o conteúdo de dist/
 
 ### Adicionar um projeto
 
-Crie `src/content/projects/meu-projeto.md`:
+Crie `src/content/projects/pt/meu-projeto.md` (e a versão em inglês com o mesmo nome em `src/content/projects/en/`):
 
 ```md
 ---
@@ -60,7 +63,7 @@ A foto fica em `src/assets/profile.jpg` (quadrada, rosto centralizado) e é otim
 
 ### Currículo
 
-A página `/curriculo` é gerada a partir dos mesmos dados do site. Para baixar em PDF, abra a página e clique em **Imprimir / Salvar PDF**. O layout de impressão já é A4.
+A página `/curriculo` (e `/en/resume` em inglês) é gerada a partir dos mesmos dados do site. Para baixar em PDF, abra a página e clique em **Imprimir / Salvar PDF**. O layout de impressão já é A4.
 
 > Não coloque dados pessoais sensíveis (telefone, CPF, documentos) no repositório: tudo em `public/` e no código fica público.
 
@@ -89,10 +92,11 @@ Se o repositório tiver outro nome (ex.: `portfolio`), o site fica em `https://l
 
 ```
 src/
-  components/   seções da página (About, Projects, Experience, Skills, Certifications, Contact...)
-  content/      projetos em Markdown
-  data/         dados pessoais, experiência e skills
-  layouts/      layout base com SEO, Open Graph e modo escuro
-  pages/        index, curriculo e 404
+  components/   seções da página (About, Projects, Experience, Skills, Certifications, Contact...) e páginas compartilhadas (Home, Resume)
+  content/      projetos em Markdown (pt/ e en/)
+  data/         dados pessoais, experiência e skills (em pt e en)
+  i18n/         idiomas, rotas e textos da interface
+  layouts/      layout base com SEO, Open Graph, hreflang e modo escuro
+  pages/        index, curriculo e 404 (pt) e en/ (index e resume)
 public/         favicon, imagem Open Graph e arquivos estáticos
 ```

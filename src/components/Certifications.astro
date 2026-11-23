@@ -1,11 +1,16 @@
 ---
 import Icon from './Icon.astro';
-import { awards, certificates } from '../data/certifications';
-import { formatMonth } from '../data/experience';
+import { getAwards, getCertificates } from '../data/certifications';
+import { getLang, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const awards = getAwards(lang);
+const certificates = getCertificates(lang);
 ---
 
-<section id="certificados" class="section container">
-  <h2 class="section-title">Prêmios e certificados</h2>
+<section id={t.sections.certificates.id} class="section container">
+  <h2 class="section-title">{t.certifications.title}</h2>
 
   <div class="awards">
     {
@@ -15,12 +20,12 @@ import { formatMonth } from '../data/experience';
           <div>
             <h3>{award.title}</h3>
             <p class="meta">
-              {award.issuer} · {formatMonth(award.date)}
+              {award.issuer} · {award.date}
             </p>
             <p class="muted">{award.description}</p>
             {award.pdf && (
               <a class="doc-link" href={award.pdf} target="_blank" rel="noopener">
-                <Icon name="external" size={16} /> Ver certificado (PDF)
+                <Icon name="external" size={16} /> {t.certifications.viewPdf}
               </a>
             )}
           </div>
@@ -36,10 +41,10 @@ import { formatMonth } from '../data/experience';
           <h3>{cert.title}</h3>
           <p class="meta">{cert.issuer}</p>
           <p class="muted">
-            {formatMonth(cert.date)} · {cert.hours}
+            {cert.date} · {cert.hours}
           </p>
           <a href={cert.url} target="_blank" rel="noopener noreferrer">
-            <Icon name="external" size={16} /> Ver certificado
+            <Icon name="external" size={16} /> {t.certifications.view}
           </a>
         </li>
       ))

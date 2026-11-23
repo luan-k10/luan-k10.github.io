@@ -1,21 +1,23 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
-import { profile } from '../data/profile';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { getProfile } from '../data/profile';
+import { getLang, routes, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const home = routes.home[lang];
 
 const links = [
-  { href: '/#sobre', label: 'Sobre' },
-  { href: '/#projetos', label: 'Projetos' },
-  { href: '/#carreira', label: 'Carreira' },
-  { href: '/#skills', label: 'Skills' },
-  { href: '/#certificados', label: 'Certificados' },
-  { href: '/#contato', label: 'Contato' },
-  { href: '/curriculo/', label: 'Currículo' },
+  ...Object.values(t.sections).map((section) => ({ href: `${home}#${section.id}`, label: section.label })),
+  { href: routes.resume[lang], label: t.nav.resume },
 ];
 ---
 
 <header class="header">
-  <nav class="container nav" aria-label="Principal">
-    <a class="brand" href="/">
+  <nav class="container nav" aria-label={t.nav.label}>
+      <a class="brand" href={home}>
       <svg class="mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
         <rect width="64" height="64" rx="12" />
         <path
@@ -33,7 +35,10 @@ const links = [
         ))
       }
     </ul>
-    <ThemeToggle />
+    <div class="controls">
+      <LanguageSwitcher />
+      <ThemeToggle />
+    </div>
   </nav>
 </header>
 
@@ -63,6 +68,11 @@ const links = [
     color: var(--text);
     text-decoration: none;
     margin-right: auto;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.4rem;
   }
 
   .mark rect {

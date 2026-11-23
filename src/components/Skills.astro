@@ -1,9 +1,14 @@
 ---
-import { skills } from '../data/skills';
+import { getSkills } from '../data/skills';
+import { getLang, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const skills = getSkills(lang);
 ---
 
-<section id="skills" class="section container">
-  <h2 class="section-title">Skills</h2>
+<section id={t.sections.skills.id} class="section container">
+  <h2 class="section-title">{t.skills.title}</h2>
   <div class="grid">
     {
       skills.map((group) => (

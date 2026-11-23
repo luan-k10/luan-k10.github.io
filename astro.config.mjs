@@ -7,5 +7,11 @@ import sitemap from '@astrojs/sitemap';
 //   base: '/portfolio',
 export default defineConfig({
   site: 'https://luan-k10.github.io',
+  // Português na raiz (/), inglês em /en/. Rotas e textos ficam em src/i18n/index.ts.
+  i18n: {
+    defaultLocale: 'pt',
+    locales: ['pt', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [sitemap()],
 });

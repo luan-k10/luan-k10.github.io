@@ -1,8 +1,11 @@
 ---
 import Icon from './Icon.astro';
+import { getLang, useTranslations } from '../i18n';
+
+const t = useTranslations(getLang(Astro.currentLocale));
 ---
 
-<button class="theme-toggle" type="button" aria-label="Alternar modo escuro" title="Alternar tema">
+<button class="theme-toggle" type="button" aria-label={t.theme.label} title={t.theme.title}>
   <span class="icon-sun"><Icon name="sun" /></span>
   <span class="icon-moon"><Icon name="moon" /></span>
 </button>

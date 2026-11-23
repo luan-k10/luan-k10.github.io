@@ -1,22 +1,25 @@
 ---
 import Icon from './Icon.astro';
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+import { getLang, routes, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
 
 const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
 const contacts = [
-  { icon: 'mail', label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
+  { icon: 'mail', label: t.contact.email, value: profile.email, href: `mailto:${profile.email}` },
   { icon: 'linkedin', label: 'LinkedIn', value: display(profile.linkedin), href: profile.linkedin },
   { icon: 'github', label: 'GitHub', value: display(profile.github), href: profile.github },
 ] as const;
 ---
 
-<section id="contato" class="section container">
-  <h2 class="section-title">Contato</h2>
+<section id={t.sections.contact.id} class="section container">
+  <h2 class="section-title">{t.contact.title}</h2>
   <div class="card contact">
-    <p class="lead">
-      Estou aberto a oportunidades em desenvolvimento de software e análise de dados. Vamos conversar?
-    </p>
+    <p class="lead">{t.contact.lead}</p>
     <ul class="list">
       {
         contacts.map((contact) => (
@@ -35,7 +38,7 @@ const contacts = [
         ))
       }
     </ul>
-    <a class="btn btn-primary" href="/curriculo/"><Icon name="download" /> Ver / baixar currículo</a>
+    <a class="btn btn-primary" href={routes.resume[lang]}><Icon name="download" /> {t.contact.resume}</a>
   </div>
 </section>
 

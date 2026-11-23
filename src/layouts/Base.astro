@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { site, profile } from '../data/profile';
+import { site, getProfile } from '../data/profile';
+import { getAlternates, getLang, htmlLang, languages, ogLocale, useTranslations, type Lang } from '../i18n';
 
 interface Props {
   title?: string;
@@ -8,7 +9,13 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title = site.title, description = site.description, noindex = false } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const siteTitle = t.site.title(profile.shortName);
+const { title = siteTitle, description = t.site.description, noindex = false } = Astro.props;
+const alternates = getAlternates(Astro.url.pathname);
+const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(site.ogImage, Astro.site);
 const jsonLd = {
@@ -22,7 +29,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={htmlLang[lang]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,13 +38,24 @@ const jsonLd = {
     <meta name="author" content={profile.name} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    {
+      alternates && (
+        <>
+          {(Object.keys(alternates) as Lang[]).map((l) => (
+            <link rel="alternate" hreflang={htmlLang[l]} href={new URL(alternates[l], Astro.site)} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={new URL(alternates.pt, Astro.site)} />
+        </>
+      )
+    }
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#6e1423" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content={site.locale} />
-    <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    {otherLangs.map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+    <meta property="og:site_name" content={siteTitle} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

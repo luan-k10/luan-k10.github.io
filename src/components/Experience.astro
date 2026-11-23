@@ -1,10 +1,16 @@
 ---
-import { experience, formatPeriod } from '../data/experience';
-import { profile } from '../data/profile';
+import { getExperience } from '../data/experience';
+import { getProfile } from '../data/profile';
+import { getLang, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const experience = getExperience(lang);
 ---
 
-<section id="carreira" class="section container">
-  <h2 class="section-title">Carreira</h2>
+<section id={t.sections.career.id} class="section container">
+  <h2 class="section-title">{t.career.title}</h2>
   <div class="columns">
     <ol class="timeline">
       {
@@ -18,7 +24,7 @@ import { profile } from '../data/profile';
                 <div class="role">
                   <div class="role-head">
                     <strong>{role.title}</strong>
-                    <span class="period">{formatPeriod(role)}</span>
+                    <span class="period">{role.period}</span>
                   </div>
                   <ul>
                     {role.highlights.map((item) => (
@@ -35,7 +41,7 @@ import { profile } from '../data/profile';
 
     <aside class="side">
       <div class="card">
-        <h3>Formação</h3>
+        <h3>{t.career.education}</h3>
         {
           profile.education.map((course) => (
             <div class="edu">
@@ -47,7 +53,7 @@ import { profile } from '../data/profile';
         }
       </div>
       <div class="card">
-        <h3>Idiomas</h3>
+        <h3>{t.career.languages}</h3>
         {
           profile.languages.map((lang) => (
             <p class="lang">

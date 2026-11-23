@@ -1,12 +1,17 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+import { getLang, routes, useTranslations } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const profile = getProfile(lang);
 ---
 
-<section id="sobre" class="hero container">
+<section id={t.sections.about.id} class="hero container">
   <div class="intro">
-    <p class="eyebrow">Olá, eu sou</p>
+    <p class="eyebrow">{t.about.greeting}</p>
     <h1>{profile.name}</h1>
     <p class="headline">{profile.headline}</p>
     <p class="location muted"><Icon name="pin" size={16} /> {profile.location}</p>
@@ -14,8 +19,8 @@ import { profile } from '../data/profile';
       {profile.about.map((paragraph) => <p>{paragraph}</p>)}
     </div>
     <div class="actions">
-      <a class="btn btn-primary" href="#contato"><Icon name="mail" /> Fale comigo</a>
-      <a class="btn" href="/curriculo/"><Icon name="download" /> Currículo</a>
+      <a class="btn btn-primary" href={`#${t.sections.contact.id}`}><Icon name="mail" /> {t.about.contactMe}</a>
+            <a class="btn" href={routes.resume[lang]}><Icon name="download" /> {t.about.resume}</a>
       <a class="btn" href={profile.github} target="_blank" rel="noopener noreferrer">
         <Icon name="github" /> GitHub
       </a>
@@ -30,7 +35,7 @@ import { profile } from '../data/profile';
         <Image
           class="photo"
           src={profile.photo}
-          alt={`Foto de ${profile.shortName}`}
+          alt={t.about.photoAlt(profile.shortName)}
           width={560}
           height={560}
           widths={[280, 560]}
@@ -39,7 +44,7 @@ import { profile } from '../data/profile';
           fetchpriority="high"
         />
       ) : (
-        <div class="photo placeholder" role="img" aria-label={`Iniciais de ${profile.shortName}`}>
+        <div class="photo placeholder" role="img" aria-label={t.about.initialsLabel(profile.shortName)}>
           {profile.initials}
         </div>
       )

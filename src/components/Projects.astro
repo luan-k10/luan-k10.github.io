@@ -1,13 +1,17 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Icon from './Icon.astro';
+import { getProjects } from '../data/projects';
+import { getLang, useTranslations } from '../i18n';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
 const rendered = await Promise.all(projects.map(async (project) => ({ project, ...(await render(project)) })));
 ---
 
-<section id="projetos" class="section container">
-  <h2 class="section-title">Projetos</h2>
+<section id={t.sections.projects.id} class="section container">
+  <h2 class="section-title">{t.projects.title}</h2>
   <div class="grid">
     {
       rendered.map(({ project, Content }) => (
@@ -23,7 +27,7 @@ const rendered = await Promise.all(projects.map(async (project) => ({ project, .
                     href={project.data.awardUrl}
                     target="_blank"
                     rel="noopener"
-                    title="Ver certificado (PDF)"
+                    title={t.projects.viewCertificate}
                   >
                     {project.data.award}
                   </a>
@@ -37,7 +41,7 @@ const rendered = await Promise.all(projects.map(async (project) => ({ project, .
           <div class="details">
             <Content />
           </div>
-          <ul class="tags" aria-label="Tecnologias">
+          <ul class="tags" aria-label={t.projects.technologies}>
             {project.data.stack.map((tech) => (
               <li class="tag">{tech}</li>
             ))}
@@ -45,12 +49,12 @@ const rendered = await Promise.all(projects.map(async (project) => ({ project, .
           <div class="links">
             {project.data.demo && (
               <a class="btn btn-primary" href={project.data.demo} target="_blank" rel="noopener noreferrer">
-                <Icon name="external" /> Ver online
+                <Icon name="external" /> {t.projects.demo}
               </a>
             )}
             {project.data.repo && (
               <a class="btn" href={project.data.repo} target="_blank" rel="noopener noreferrer">
-                <Icon name="github" /> Código
+                <Icon name="github" /> {t.projects.code}
               </a>
             )}
           </div>

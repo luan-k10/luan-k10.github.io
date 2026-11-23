@@ -1,14 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
+
+// O GitHub Pages usa esta mesma página para qualquer endereço inexistente, então ela é bilíngue.
 ---
 
-<Base title="Página não encontrada" noindex>
+<Base title="Página não encontrada · Page not found" noindex>
   <Header />
   <main class="container notfound">
     <h1>404</h1>
     <p class="muted">Ops! Esta página não existe.</p>
-    <a class="btn btn-primary" href="/">Voltar ao início</a>
+    <p class="muted" lang="en">Oops! This page doesn't exist.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Voltar ao início</a>
+      <a class="btn" href="/en/" lang="en">Back to home</a>
+    </div>
   </main>
 </Base>
 
@@ -19,6 +25,18 @@ import Header from '../components/Header.astro';
     place-content: center;
     justify-items: center;
     text-align: center;
+  }
+
+  .notfound p {
+    margin: 0 0 0.25rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
   }
 
   h1 {
