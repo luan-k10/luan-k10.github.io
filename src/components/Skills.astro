@@ -7,33 +7,75 @@ const t = useTranslations(lang);
 const skills = getSkills(lang);
 ---
 
-<section id={t.sections.skills.id} class="section container">
-  <h2 class="section-title">{t.skills.title}</h2>
-  <div class="grid">
-    {
-      skills.map((group) => (
-        <div class="card">
-          <h3>{group.category}</h3>
-          <ul class="tags">
-            {group.items.map((item) => (
-              <li class="tag">{item}</li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
+<section id={t.sections.skills.id} class="section">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">{t.skills.eyebrow}</p>
+        <h2>{t.skills.title}</h2>
+      </div>
+    </div>
+
+    <div class="skills">
+      {
+        skills.map((group) => (
+          <div class="group">
+            <h3>{group.category}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>
 
 <style>
-  .grid {
+  /* O fundo aparece pelos espaços de 1px e forma as divisórias, para qualquer quantidade de grupos. */
+  .skills {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .group {
+    padding: 26px;
+    background: var(--surface);
   }
 
   h3 {
-    font-size: 1.05rem;
-    margin-bottom: 0.9rem;
+    margin: 0 0 14px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--leather);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding: 6px 0;
+    font-size: 15.5px;
+  }
+
+  @media (max-width: 860px) {
+    .skills {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .group {
+      padding: 20px;
+    }
   }
 </style>

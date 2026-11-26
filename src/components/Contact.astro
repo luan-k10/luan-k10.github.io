@@ -1,89 +1,125 @@
 ---
-import Icon from './Icon.astro';
 import { getProfile } from '../data/profile';
-import { getLang, routes, useTranslations } from '../i18n';
+import { getLang, useTranslations } from '../i18n';
 
 const lang = getLang(Astro.currentLocale);
 const t = useTranslations(lang);
 const profile = getProfile(lang);
 
-const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-
-const contacts = [
-  { icon: 'mail', label: t.contact.email, value: profile.email, href: `mailto:${profile.email}` },
-  { icon: 'linkedin', label: 'LinkedIn', value: display(profile.linkedin), href: profile.linkedin },
-  { icon: 'github', label: 'GitHub', value: display(profile.github), href: profile.github },
-] as const;
+const channels = [
+  { label: t.contact.email, value: profile.email, href: `mailto:${profile.email}` },
+  { label: 'LinkedIn', value: profile.linkedin.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''), href: profile.linkedin },
+  { label: 'GitHub', value: profile.github.replace(/^https:\/\//, ''), href: profile.github },
+  { label: t.contact.location, value: profile.location },
+];
 ---
 
-<section id={t.sections.contact.id} class="section container">
-  <h2 class="section-title">{t.contact.title}</h2>
-  <div class="card contact">
-    <p class="lead">{t.contact.lead}</p>
-    <ul class="list">
+<section id={t.sections.contact.id} class="contact">
+  <div class="container inner">
+    <div>
+      <p class="eyebrow">{t.contact.eyebrow}</p>
+      <h2>{t.contact.title}</h2>
+      <p class="lead">{t.contact.lead}</p>
+      <a class="btn btn-gold" href={`mailto:${profile.email}`}>{profile.email}</a>
+    </div>
+    <ul>
       {
-        contacts.map((contact) => (
+        channels.map((channel) => (
           <li>
-            <a
-              href={contact.href}
-              {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            >
-              <Icon name={contact.icon} size={22} />
-              <span>
-                <strong>{contact.label}</strong>
-                <span class="muted">{contact.value}</span>
-              </span>
-            </a>
+            {channel.href ? (
+              <a
+                href={channel.href}
+                {...(channel.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {channel.value}
+              </a>
+            ) : (
+              <b>{channel.value}</b>
+            )}
+            <span>{channel.label}</span>
           </li>
         ))
       }
     </ul>
-    <a class="btn btn-primary" href={routes.resume[lang]}><Icon name="download" /> {t.contact.resume}</a>
   </div>
 </section>
 
 <style>
   .contact {
+    background: var(--deep);
+    color: var(--deep-text);
+    padding-block: 80px;
+  }
+
+  .inner {
     display: grid;
-    gap: 1.25rem;
-    justify-items: start;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: end;
+  }
+
+  .eyebrow {
+    color: var(--gold);
+  }
+
+  h2 {
+    font-size: 40px;
+    letter-spacing: -0.02em;
+    margin: 14px 0 16px;
   }
 
   .lead {
-    margin: 0;
-    font-size: 1.1rem;
+    color: var(--deep-body);
+    margin: 0 0 28px;
   }
 
-  .list {
+  ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 0.75rem;
-    width: 100%;
   }
 
-  .list a {
+  li {
     display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.9rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--text);
-    text-decoration: none;
-    transition: border-color 0.15s;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--deep-line);
   }
 
-  .list a:hover {
-    border-color: var(--accent);
+  li a,
+  li b {
+    font-weight: 500;
+    overflow-wrap: anywhere;
   }
 
-  .list a > span {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.35;
-    word-break: break-word;
+  li a:hover {
+    color: var(--gold-light);
+  }
+
+  li span {
+    color: var(--deep-muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .contact {
+      padding-block: 60px;
+    }
+
+    .inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    h2 {
+      font-size: 30px;
+    }
+
+    li {
+      flex-direction: column-reverse;
+      gap: 2px;
+    }
   }
 </style>

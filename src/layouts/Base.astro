@@ -1,4 +1,9 @@
 ---
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import { site, getProfile } from '../data/profile';
 import { getAlternates, getLang, htmlLang, languages, ogLocale, useTranslations, type Lang } from '../i18n';
@@ -50,7 +55,8 @@ const jsonLd = {
     }
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#6e1423" />
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15100c" media="(prefers-color-scheme: dark)" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale[lang]} />

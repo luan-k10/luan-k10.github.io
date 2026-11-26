@@ -7,29 +7,13 @@ const target = lang === 'pt' ? 'en' : 'pt';
 const href = (getAlternates(Astro.url.pathname) ?? routes.home)[target];
 ---
 
-<a class="lang-switch" href={href} hreflang={htmlLang[target]} lang={htmlLang[target]} aria-label={t.switcher.label} title={t.switcher.label}>
+<a
+  class="icon-btn"
+  href={href}
+  hreflang={htmlLang[target]}
+  lang={htmlLang[target]}
+  aria-label={t.switcher.label}
+  title={t.switcher.label}
+>
   {t.switcher.short}
 </a>
-
-<style>
-  .lang-switch {
-    display: inline-grid;
-    place-items: center;
-    min-width: 2.4rem;
-    height: 2.4rem;
-    padding-inline: 0.5rem;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--bg-elev);
-    color: var(--text);
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-  }
-
-  .lang-switch:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-</style>

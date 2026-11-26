@@ -1,5 +1,4 @@
 ---
-import Icon from './Icon.astro';
 import { getAwards, getCertificates } from '../data/certifications';
 import { getLang, useTranslations } from '../i18n';
 
@@ -9,109 +8,119 @@ const awards = getAwards(lang);
 const certificates = getCertificates(lang);
 ---
 
-<section id={t.sections.certificates.id} class="section container">
-  <h2 class="section-title">{t.certifications.title}</h2>
+<section id={t.sections.certificates.id} class="section">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">{t.certifications.eyebrow}</p>
+        <h2>{t.certifications.title}</h2>
+      </div>
+    </div>
 
-  <div class="awards">
-    {
-      awards.map((award) => (
-        <article class="card award">
-          <span class="medal" aria-hidden="true">🏅</span>
-          <div>
-            <h3>{award.title}</h3>
-            <p class="meta">
-              {award.issuer} · {award.date}
-            </p>
-            <p class="muted">{award.description}</p>
-            {award.pdf && (
-              <a class="doc-link" href={award.pdf} target="_blank" rel="noopener">
-                <Icon name="external" size={16} /> {t.certifications.viewPdf}
+    <ul class="certs">
+      {
+        awards.map((award) => (
+          <li class="cert">
+            <div>
+              <span class="label">{t.certifications.award}</span>
+              {award.pdf ? (
+                <a class="title" href={award.pdf} target="_blank" rel="noopener" title={t.certifications.viewPdf}>
+                  {award.title}
+                </a>
+              ) : (
+                <b class="title">{award.title}</b>
+              )}
+              <p class="description">{award.description}</p>
+            </div>
+            <span class="issuer">{award.issuer}</span>
+            <span class="date">{award.date}</span>
+          </li>
+        ))
+      }
+      {
+        certificates.map((cert) => (
+          <li class="cert">
+            <div>
+              <a class="title" href={cert.url} target="_blank" rel="noopener noreferrer" title={t.certifications.view}>
+                {cert.title}
               </a>
-            )}
-          </div>
-        </article>
-      ))
-    }
+            </div>
+            <span class="issuer">
+              {cert.issuer} · {cert.hours}
+            </span>
+            <span class="date">{cert.date}</span>
+          </li>
+        ))
+      }
+    </ul>
   </div>
-
-  <ul class="certs">
-    {
-      certificates.map((cert) => (
-        <li class="card cert">
-          <h3>{cert.title}</h3>
-          <p class="meta">{cert.issuer}</p>
-          <p class="muted">
-            {cert.date} · {cert.hours}
-          </p>
-          <a href={cert.url} target="_blank" rel="noopener noreferrer">
-            <Icon name="external" size={16} /> {t.certifications.view}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
 </section>
 
 <style>
-  .awards {
-    display: grid;
-    gap: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .award {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-    background: linear-gradient(135deg, var(--accent-soft), var(--bg-elev) 60%);
-  }
-
-  .medal {
-    font-size: 2.2rem;
-    line-height: 1;
-  }
-
-  h3 {
-    font-size: 1.05rem;
-    margin: 0 0 0.25rem;
-  }
-
-  p {
-    margin: 0 0 0.25rem;
-  }
-
-  .meta {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--accent);
-  }
-
   .certs {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.25rem;
+    border-top: 1px solid var(--line);
   }
 
   .cert {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 260px 110px;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
   }
 
-  .cert a {
-    margin-top: auto;
+  .label {
+    font: 600 11px/1 var(--sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-right: 10px;
   }
 
-  .cert a,
-  .doc-link {
-    padding-top: 0.75rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-weight: 600;
-    font-size: 0.9rem;
+  .title {
+    font-weight: 500;
+  }
+
+  a.title {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s;
+  }
+
+  a.title:hover {
+    text-decoration-color: var(--gold);
+  }
+
+  .description {
+    margin: 6px 0 0;
+    color: var(--body);
+    font-size: 14.5px;
+  }
+
+  .issuer {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .date {
+    font: 400 13.5px/1 var(--mono);
+    color: var(--muted);
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .cert {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .date {
+      text-align: left;
+    }
   }
 </style>
