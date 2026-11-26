@@ -3,6 +3,10 @@ title: Valei-me · Suggestions
 summary: Website where followers of the @valeime.catolico profile can submit song, saint and post ideas.
 context: Personal project
 stack: [HTML, JavaScript, Google Apps Script, Google Sheets, Netlify]
+images:
+  - ../../../assets/projects/valeime-1.png
+  - ../../../assets/projects/valeime-2.png
+  - ../../../assets/projects/valeime-3.png
 repo: https://github.com/luan-k10/valeime-site
 demo: https://valeime.netlify.app
 featured: true

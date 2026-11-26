@@ -1,0 +1,21 @@
+---
+// Monograma "LK". A cor vem de `fill` (padrão: currentColor).
+interface Props {
+  height?: number;
+  class?: string;
+}
+
+const { height = 28, class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 367.9 460"
+  height={height}
+  width={Math.round((height * 367.9) / 460)}
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M0 0 L14 0 L14 446 L335.89 446 L145.29 239.5 L155.58 230 L367.86 460 L0 460 Z M320.1 0 L339.54 0 L46 304.84 L46 284.65 Z" />
+</svg>

@@ -22,17 +22,18 @@ O site tem duas versões: **português** na raiz (`/`, `/curriculo/`) e **inglê
 | O quê | Arquivo |
 | --- | --- |
 | Textos fixos da interface (menu, títulos, botões) e rotas de cada idioma | `src/i18n/index.ts` |
-| Nome, cargo, bio, links, formação, idiomas, foto | `src/data/profile.ts` |
+| Nome, cargo, apresentação, principais tecnologias, links, formação, idiomas | `src/data/profile.ts` |
 | Experiências (timeline da carreira) | `src/data/experience.ts` |
 | Skills | `src/data/skills.ts` |
 | Prêmios e certificados | `src/data/certifications.ts` |
 | PDFs de certificados (linkados pelo campo `pdf` do prêmio / `awardUrl` do projeto) | `public/certificados/` |
 | Projetos (um arquivo `.md` por projeto e idioma) | `src/content/projects/pt/` e `src/content/projects/en/` |
-| Cores e estilos globais (destaque bordô `--accent`, `--accent-fill`) | `src/styles/global.css` |
+| Identidade visual: cores (marrom `--leather`, dourado `--gold`, fundo escuro `--deep`), fontes IBM Plex e tema claro/escuro | `src/styles/global.css` |
+| Imagens dos projetos (logos, capturas de tela) | `src/assets/projects/` |
 | Imagem de compartilhamento (Open Graph, 1200×630, com a logo "LK") | `public/og-image.png` |
-| Logo "LK" (bordô `#6e1423`, fundo transparente) | `public/logo.svg` |
+| Logo "LK" (marrom `#6b4c33`, fundo transparente) | `public/logo.svg` |
 | Logo "LK" branca para fundos escuros | `public/logo-white.svg` |
-| Ícone da aba e do cabeçalho (logo "LK" branca sobre bordô) | `public/favicon.svg` |
+| Ícone da aba (logo "LK" dourada `#a8853f` sobre marrom-escuro `#211913`) | `public/favicon.svg` |
 
 ### Adicionar um projeto
 
@@ -44,9 +45,11 @@ title: Nome do projeto
 summary: Uma frase sobre o que ele faz.
 context: Projeto pessoal          # opcional
 status: Em andamento              # opcional
-award: 🏅 Nome do prêmio          # opcional
+award: Nome do prêmio             # opcional
 awardUrl: /certificados/premio.pdf # opcional (link do selo)
 stack: [Java, Oracle]
+images: [../../../assets/projects/meu-projeto.png] # opcional: 1 imagem ou até 3 (galeria)
+imageFit: contain                # opcional: contain (logos) ou cover (padrão, capturas de tela)
 repo: https://github.com/luan-k10/meu-projeto   # opcional
 demo: https://meu-projeto.exemplo.com           # opcional
 order: 3                          # posição na lista
@@ -57,9 +60,9 @@ Detalhes em Markdown (lista de funcionalidades, resultados etc.).
 
 O formato é validado no build (`src/content.config.ts`). Se faltar um campo obrigatório, o `npm run build` avisa.
 
-### Foto
+### Imagens dos projetos
 
-A foto fica em `src/assets/profile.jpg` (quadrada, rosto centralizado) e é otimizada pelo Astro no build. Para trocar, substitua o arquivo mantendo o nome. Para voltar às iniciais, use `photo: undefined` em `src/data/profile.ts`.
+As imagens ficam em `src/assets/projects/` e são otimizadas pelo Astro no build (WebP). Cada projeto indica as suas no campo `images` (caminho relativo ao arquivo `.md`). Com uma imagem, ela ocupa todo o topo do card; com duas ou três, aparecem lado a lado como galeria.
 
 ### Currículo
 
@@ -92,7 +95,7 @@ Se o repositório tiver outro nome (ex.: `portfolio`), o site fica em `https://l
 
 ```
 src/
-  components/   seções da página (About, Projects, Experience, Skills, Certifications, Contact...) e páginas compartilhadas (Home, Resume)
+  components/   seções da página (About, Experience, Projects, Skills, Certifications, Contact...), logo LK e páginas compartilhadas (Home, Resume)
   content/      projetos em Markdown (pt/ e en/)
   data/         dados pessoais, experiência e skills (em pt e en)
   i18n/         idiomas, rotas e textos da interface

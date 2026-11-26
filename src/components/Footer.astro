@@ -1,28 +1,48 @@
 ---
+import Logo from './Logo.astro';
 import { getProfile } from '../data/profile';
-import { getLang, useTranslations } from '../i18n';
+import { getLang } from '../i18n';
 
-const lang = getLang(Astro.currentLocale);
-const t = useTranslations(lang);
-const profile = getProfile(lang);
-
+const profile = getProfile(getLang(Astro.currentLocale));
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="container">
-    <p class="muted">© {year} {profile.name} · {t.footer}</p>
+  <div class="container inner">
+    <Logo height={20} class="mark" />
+    <p>© {year} {profile.name}</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    border-top: 1px solid var(--border);
-    padding-block: 2rem;
-    font-size: 0.9rem;
+    background: var(--deep);
+    border-top: 1px solid var(--deep-line);
+    color: #8d7f6d;
+    font-size: 13.5px;
+  }
+
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 68px;
+  }
+
+  .footer :global(.mark) {
+    color: var(--gold);
   }
 
   p {
     margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .inner {
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      min-height: 96px;
+    }
   }
 </style>

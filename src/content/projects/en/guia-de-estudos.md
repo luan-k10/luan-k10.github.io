@@ -3,6 +3,7 @@ title: Study Guide
 summary: College study hub with an interactive website for each subject, organized by area and with progress saved in the browser.
 context: Personal project
 stack: [HTML, CSS, JavaScript, localStorage, GitHub Pages]
+images: [../../../assets/projects/guia-de-estudos.png]
 repo: https://github.com/luan-k10/estudos
 demo: https://luan-k10.github.io/estudos/
 featured: true

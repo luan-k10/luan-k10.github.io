@@ -27,10 +27,10 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
   <main class="page container">
     <div class="toolbar no-print">
       <p class="muted">{t.resume.hint}</p>
-      <button class="btn btn-primary" type="button" id="print"><Icon name="download" /> {t.resume.print}</button>
+      <button class="btn btn-dark" type="button" id="print"><Icon name="download" /> {t.resume.print}</button>
     </div>
 
-    <article class="cv card">
+    <article class="cv">
       <header class="cv-head">
         <h1>{profile.name}</h1>
         <p class="role">{profile.headline}</p>
@@ -155,7 +155,7 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
             ))
           }
           <li>
-            <strong>{t.resume.languages}:</strong>
+            <strong>{t.resume.languages}:</strong>{' '}
             {profile.languages.map((lang) => `${lang.name} (${lang.level.toLowerCase()})`).join(', ')}
           </li>
         </ul>
@@ -189,24 +189,30 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
   }
 
   .cv {
-    padding: 2.5rem;
-    font-size: 0.95rem;
+    padding: 48px;
+    font-size: 15px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-radius: var(--radius);
   }
 
   .cv-head {
-    border-bottom: 2px solid var(--accent);
+    border-bottom: 1px solid var(--line-strong);
     padding-bottom: 1rem;
     margin-bottom: 1rem;
   }
 
   h1 {
-    font-size: 1.9rem;
+    font-size: 30px;
+    letter-spacing: -0.02em;
     margin: 0;
   }
 
   .role {
     margin: 0.2rem 0 0.5rem;
-    font-weight: 600;
+    font-weight: 500;
+    color: var(--leather);
   }
 
   .contact {
@@ -220,10 +226,10 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
   }
 
   h2 {
-    font-size: 0.95rem;
+    font-size: 12.5px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
+    letter-spacing: 0.1em;
+    color: var(--gold);
     margin: 1.4rem 0 0.6rem;
   }
 
@@ -246,11 +252,20 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
   .entry-head span,
   .entry-head a {
     color: var(--muted);
-    font-size: 0.88rem;
+    font: 400 13px/1.6 var(--mono);
   }
 
   .sub {
-    color: var(--muted);
+    color: var(--body);
+  }
+
+  .cv a:hover {
+    color: var(--leather);
+  }
+
+  .entry li::marker,
+  .skills li::marker {
+    color: var(--gold);
   }
 
   .entry ul,
@@ -265,12 +280,16 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
       margin: 14mm;
     }
 
-    :global(:root) {
+    :global(:root),
+    :global(:root[data-theme='dark']) {
       --bg: #fff;
-      --bg-elev: #fff;
-      --text: #111;
-      --muted: #444;
-      --accent: #6e1423;
+      --surface: #fff;
+      --text: #231c16;
+      --body: #3a3029;
+      --muted: #5f554c;
+      --line-strong: #cfc6b8;
+      --leather: #6b4c33;
+      --gold: #8a6a2c;
       color-scheme: light;
     }
 
@@ -290,7 +309,6 @@ const display = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace
 
     .cv {
       border: 0;
-      box-shadow: none;
       padding: 0;
     }
 

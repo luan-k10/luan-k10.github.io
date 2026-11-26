@@ -3,9 +3,11 @@ title: Risk Assessment App
 summary: App to automate and simplify filling out risk assessments in companies.
 context: Extension project · PEI · Multivix College – Serra · team of 7
 status: In progress
-award: 🏅 Honorable Mention – 4th PEI Showcase (2025/1)
+award: Honorable Mention – 4th PEI Showcase (2025/1)
 awardUrl: /certificados/mencao-honrosa-iv-mostra-pei-2025.pdf
 stack: [Angular 21, SSR (Express), TypeScript, Vitest, HTML, CSS]
+images: [../../../assets/projects/analise-de-risco.png]
+imageFit: contain
 repo: https://github.com/luan-k10/aplicativo-analise-de-risco
 featured: true
 order: 1

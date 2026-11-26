@@ -104,14 +104,25 @@ export function formatMonth(value: string, lang: Lang): string {
   return lang === 'pt' ? `${name}/${year}` : `${name} ${year}`;
 }
 
+function formatPeriod(start: string, end: string | null, lang: Lang): string {
+  return `${formatMonth(start, lang)} – ${end ? formatMonth(end, lang) : ui[lang].career.present}`;
+}
+
 export function getExperience(lang: Lang) {
-  return experience.map((job) => ({
-    company: job.company,
-    note: job.note && tr(job.note, lang),
-    roles: job.roles.map((role) => ({
-      title: tr(role.title, lang),
-      period: `${formatMonth(role.start, lang)} – ${role.end ? formatMonth(role.end, lang) : ui[lang].career.present}`,
-      highlights: role.highlights.map((item) => tr(item, lang)),
-    })),
-  }));
+  return experience.map((job) => {
+    const start = job.roles.map((role) => role.start).sort()[0];
+    const ends = job.roles.map((role) => role.end);
+    const end = ends.includes(null) ? null : (ends as string[]).sort().at(-1)!;
+    return {
+      company: job.company,
+      note: job.note && tr(job.note, lang),
+      period: formatPeriod(start, end, lang),
+      roles: job.roles.map((role) => ({
+        title: tr(role.title, lang),
+        period: formatPeriod(role.start, role.end, lang),
+        current: role.end === null,
+        highlights: role.highlights.map((item) => tr(item, lang)),
+      })),
+    };
+  });
 }

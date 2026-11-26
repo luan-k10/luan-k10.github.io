@@ -1,4 +1,5 @@
 ---
+import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { getProfile } from '../data/profile';
@@ -9,22 +10,14 @@ const t = useTranslations(lang);
 const profile = getProfile(lang);
 const home = routes.home[lang];
 
-const links = [
-  ...Object.values(t.sections).map((section) => ({ href: `${home}#${section.id}`, label: section.label })),
-  { href: routes.resume[lang], label: t.nav.resume },
-];
+const links = Object.values(t.sections).map((section) => ({ href: `${home}#${section.id}`, label: section.label }));
 ---
 
 <header class="header">
   <nav class="container nav" aria-label={t.nav.label}>
-      <a class="brand" href={home}>
-      <svg class="mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
-        <rect width="64" height="64" rx="12" />
-        <path
-          d="M14.41 10 L17.52 10 L17.52 50.89 L42.49 50.89 L27 34.11 L29.29 32 L49.59 54 L14.41 54 Z M42.57 10 L46.88 10 L20.58 37.32 L20.58 32.84 Z"
-        />
-      </svg>
-      {profile.shortName}
+    <a class="brand" href={home} aria-label={`${profile.shortName} · ${t.nav.home}`}>
+      <Logo class="mark" />
+      <b>{profile.shortName}</b>
     </a>
     <ul class="menu">
       {
@@ -38,6 +31,7 @@ const links = [
     <div class="controls">
       <LanguageSwitcher />
       <ThemeToggle />
+      <a class="btn btn-dark resume" href={routes.resume[lang]}>{t.nav.resume}</a>
     </div>
   </nav>
 </header>
@@ -47,76 +41,97 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 10;
-    backdrop-filter: blur(10px);
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    min-height: 4rem;
+    min-height: 72px;
+    gap: 32px;
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    font-weight: 800;
-    font-size: 1.1rem;
-    color: var(--text);
-    text-decoration: none;
+    gap: 12px;
     margin-right: auto;
+    color: var(--text);
   }
 
-  .controls {
-    display: flex;
-    gap: 0.4rem;
+  .brand :global(.mark) {
+    color: var(--brand);
   }
 
-  .mark rect {
-    fill: var(--accent-fill);
-  }
-
-  .mark path {
-    fill: var(--on-accent);
+  .brand b {
+    font-weight: 600;
+    font-size: 16px;
+    white-space: nowrap;
   }
 
   .menu {
     display: flex;
-    gap: 0.25rem;
+    gap: 26px;
     list-style: none;
     margin: 0;
     padding: 0;
-    overflow-x: auto;
+    font-size: 14.5px;
   }
 
   .menu a {
     display: block;
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
-    color: var(--muted);
-    text-decoration: none;
-    font-weight: 500;
+    padding-block: 6px;
+    color: var(--body);
     white-space: nowrap;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
   }
 
   .menu a:hover {
     color: var(--text);
-    background: var(--accent-soft);
+    border-bottom-color: var(--gold);
   }
 
-  @media (max-width: 760px) {
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .resume {
+    height: 38px;
+    font-size: 14px;
+    padding: 0 16px;
+    margin-left: 4px;
+  }
+
+  @media (max-width: 1040px) {
     .nav {
       flex-wrap: wrap;
-      padding-block: 0.5rem;
+      gap: 0 16px;
+      padding-top: 10px;
+      min-height: 0;
     }
 
     .menu {
       order: 3;
       width: 100%;
-      padding-bottom: 0.25rem;
+      overflow-x: auto;
+      gap: 22px;
+      padding-block: 8px 6px;
+      scrollbar-width: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .brand :global(.mark) {
+      height: 24px;
+      width: auto;
+    }
+
+    .menu {
+      font-size: 14px;
     }
   }
 </style>

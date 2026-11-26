@@ -1,6 +1,6 @@
 ---
+import { Image } from 'astro:assets';
 import { render } from 'astro:content';
-import Icon from './Icon.astro';
 import { getProjects } from '../data/projects';
 import { getLang, useTranslations } from '../i18n';
 
@@ -10,150 +10,231 @@ const projects = await getProjects(lang);
 const rendered = await Promise.all(projects.map(async (project) => ({ project, ...(await render(project)) })));
 ---
 
-<section id={t.sections.projects.id} class="section container">
-  <h2 class="section-title">{t.projects.title}</h2>
-  <div class="grid">
-    {
-      rendered.map(({ project, Content }) => (
-        <article class="card project">
-          {project.data.context && <p class="context">{project.data.context}</p>}
-          <h3>{project.data.title}</h3>
-          {(project.data.award || project.data.status) && (
-            <div class="badges">
-              {project.data.award &&
-                (project.data.awardUrl ? (
-                  <a
-                    class="badge award"
-                    href={project.data.awardUrl}
-                    target="_blank"
-                    rel="noopener"
-                    title={t.projects.viewCertificate}
-                  >
-                    {project.data.award}
-                  </a>
-                ) : (
-                  <span class="badge award">{project.data.award}</span>
-                ))}
-              {project.data.status && <span class="badge">{project.data.status}</span>}
-            </div>
-          )}
-          <p class="summary">{project.data.summary}</p>
-          <div class="details">
-            <Content />
-          </div>
-          <ul class="tags" aria-label={t.projects.technologies}>
-            {project.data.stack.map((tech) => (
-              <li class="tag">{tech}</li>
-            ))}
-          </ul>
-          <div class="links">
-            {project.data.demo && (
-              <a class="btn btn-primary" href={project.data.demo} target="_blank" rel="noopener noreferrer">
-                <Icon name="external" /> {t.projects.demo}
-              </a>
-            )}
-            {project.data.repo && (
-              <a class="btn" href={project.data.repo} target="_blank" rel="noopener noreferrer">
-                <Icon name="github" /> {t.projects.code}
-              </a>
-            )}
-          </div>
-        </article>
-      ))
-    }
+<section id={t.sections.projects.id} class="section tinted">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">{t.projects.eyebrow}</p>
+        <h2>{t.projects.title}</h2>
+      </div>
+      <p>{t.projects.lead}</p>
+    </div>
+
+    <div class="grid">
+      {
+        rendered.map(({ project, Content }) => {
+          const { data } = project;
+          const images = data.images ?? [];
+          const gallery = images.length > 1;
+          const context = [data.context, data.status].filter(Boolean).join(' · ');
+          return (
+            <article class="project">
+              {images.length > 0 && (
+                <div class:list={['shot', { gallery, contain: !gallery && data.imageFit === 'contain' }]}>
+                  {images.map((image, index) => (
+                    <Image
+                      src={image}
+                      alt={index === 0 ? data.title : ''}
+                      widths={gallery ? [240, 480] : [560, 1120]}
+                      sizes={gallery ? '(max-width: 700px) 30vw, 170px' : '(max-width: 700px) 100vw, 556px'}
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              )}
+              <div class="body">
+                {context && <p class="ctx">{context}</p>}
+                <h3>{data.title}</h3>
+                <p class="summary">{data.summary}</p>
+                <div class="details">
+                  <Content />
+                </div>
+                {data.award &&
+                  (data.awardUrl ? (
+                    <a class="award" href={data.awardUrl} target="_blank" rel="noopener" title={t.projects.viewCertificate}>
+                      {data.award}
+                    </a>
+                  ) : (
+                    <p class="award">{data.award}</p>
+                  ))}
+                <ul class="chips" aria-label={t.projects.technologies}>
+                  {data.stack.map((tech) => (
+                    <li>{tech}</li>
+                  ))}
+                </ul>
+                {(data.demo || data.repo) && (
+                  <div class="links">
+                    {data.demo && (
+                      <a href={data.demo} target="_blank" rel="noopener noreferrer">
+                        {t.projects.demo} <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                    {data.repo && (
+                      <a href={data.repo} target="_blank" rel="noopener noreferrer">
+                        {t.projects.code} <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
   </div>
 </section>
 
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
   }
 
   .project {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    transition: transform 0.2s, border-color 0.2s;
   }
 
-  .project:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
+  .shot {
+    height: 230px;
+    background: var(--tint);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
   }
 
-  .context {
+  .shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .shot.contain {
+    display: grid;
+    place-items: center;
+  }
+
+  .shot.contain img {
+    width: auto;
+    height: 120px;
+    object-fit: contain;
+  }
+
+  .shot.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 22px;
+    background: var(--deep);
+  }
+
+  .body {
+    padding: 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ctx {
+    font-size: 13px;
+    color: var(--muted);
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--accent);
   }
 
   h3 {
-    font-size: 1.3rem;
-    margin: 0;
+    font-size: 21px;
+    margin: 8px 0 10px;
   }
 
   .summary {
-    margin: 0;
-    font-weight: 500;
-  }
-
-  .badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .badge {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-
-  .badge.award {
-    border-color: #d4a017;
-    color: #a16207;
-    background: rgb(212 160 23 / 12%);
-  }
-
-  a.badge.award {
-    text-decoration: none;
-  }
-
-  a.badge.award:hover {
-    background: rgb(212 160 23 / 22%);
-  }
-
-  :global([data-theme='dark']) .badge.award {
-    color: #fcd34d;
+    color: var(--body);
+    margin: 0 0 12px;
   }
 
   .details {
-    color: var(--muted);
-    font-size: 0.95rem;
-    flex: 1;
-  }
-
-  .details :global(ul) {
-    padding-left: 1.1rem;
-    margin: 0.25rem 0 0;
+    color: var(--body);
+    font-size: 15px;
+    margin-bottom: 18px;
   }
 
   .details :global(p) {
-    margin: 0 0 0.25rem;
+    margin: 0 0 6px;
+  }
+
+  .details :global(ul) {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .details :global(li) {
+    margin-bottom: 2px;
+  }
+
+  .details :global(li::marker) {
+    color: var(--gold);
+  }
+
+  .award {
+    display: block;
+    font-size: 13.5px;
+    color: var(--brown);
+    background: var(--award-bg);
+    border-left: 3px solid var(--gold);
+    padding: 8px 12px;
+    margin: 0 0 18px;
+  }
+
+  a.award:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .chips {
+    margin-bottom: 22px;
   }
 
   .links {
+    margin-top: auto;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 22px;
+    font-size: 14.5px;
+    font-weight: 500;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  .links a {
+    color: var(--leather);
+  }
+
+  .links a:hover {
+    color: var(--text);
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .shot {
+      height: 190px;
+    }
+
+    .shot.gallery {
+      padding: 16px;
+    }
+
+    .body {
+      padding: 22px;
+    }
   }
 </style>
